@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
+	"github.com/someguy609/be-proyek-fsi/entity"
 	"gorm.io/gorm"
 )
 

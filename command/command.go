@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
-	"github.com/Caknoooo/go-gin-clean-starter/migrations"
-	"github.com/Caknoooo/go-gin-clean-starter/script"
+	"github.com/someguy609/be-proyek-fsi/constants"
+	"github.com/someguy609/be-proyek-fsi/migrations"
+	"github.com/someguy609/be-proyek-fsi/script"
 	"github.com/samber/do"
 	"gorm.io/gorm"
 )

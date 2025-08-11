@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
-	"github.com/Caknoooo/go-gin-clean-starter/controller"
-	"github.com/Caknoooo/go-gin-clean-starter/middleware"
-	"github.com/Caknoooo/go-gin-clean-starter/service"
+	"github.com/someguy609/be-proyek-fsi/constants"
+	"github.com/someguy609/be-proyek-fsi/controller"
+	"github.com/someguy609/be-proyek-fsi/middleware"
+	"github.com/someguy609/be-proyek-fsi/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
 )

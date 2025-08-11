@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"github.com/Caknoooo/go-gin-clean-starter/dto"
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
+	"github.com/someguy609/be-proyek-fsi/dto"
+	"github.com/someguy609/be-proyek-fsi/entity"
 	"gorm.io/gorm"
 )
 

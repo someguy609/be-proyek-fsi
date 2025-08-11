@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
-	"github.com/Caknoooo/go-gin-clean-starter/dto"
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
-	"github.com/Caknoooo/go-gin-clean-starter/helpers"
-	"github.com/Caknoooo/go-gin-clean-starter/repository"
-	"github.com/Caknoooo/go-gin-clean-starter/utils"
+	"github.com/someguy609/be-proyek-fsi/constants"
+	"github.com/someguy609/be-proyek-fsi/dto"
+	"github.com/someguy609/be-proyek-fsi/entity"
+	"github.com/someguy609/be-proyek-fsi/helpers"
+	"github.com/someguy609/be-proyek-fsi/repository"
+	"github.com/someguy609/be-proyek-fsi/utils"
 	"github.com/google/uuid"
 )
 

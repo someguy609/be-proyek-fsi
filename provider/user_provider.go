@@ -1,9 +1,9 @@
 package provider
 
 import (
-	"github.com/Caknoooo/go-gin-clean-starter/controller"
-	"github.com/Caknoooo/go-gin-clean-starter/repository"
-	"github.com/Caknoooo/go-gin-clean-starter/service"
+	"github.com/someguy609/be-proyek-fsi/controller"
+	"github.com/someguy609/be-proyek-fsi/repository"
+	"github.com/someguy609/be-proyek-fsi/service"
 	"github.com/samber/do"
 	"gorm.io/gorm"
 )
