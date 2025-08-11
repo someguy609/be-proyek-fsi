@@ -27,6 +27,4 @@ func RegisterDependencies(injector *do.Injector) {
 
 	// Provide Dependencies
 	ProvideUserDependencies(injector, db, jwtService)
-	ProvideLocationDependencies(injector, db)
-	ProvideCustomerCountDependencies(injector, db)
 }
