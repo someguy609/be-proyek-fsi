@@ -4,10 +4,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/Caknoooo/go-gin-clean-starter/command"
-	"github.com/Caknoooo/go-gin-clean-starter/middleware"
-	"github.com/Caknoooo/go-gin-clean-starter/provider"
-	"github.com/Caknoooo/go-gin-clean-starter/routes"
+	"github.com/someguy609/be-proyek-fsi/command"
+	"github.com/someguy609/be-proyek-fsi/middleware"
+	"github.com/someguy609/be-proyek-fsi/provider"
+	"github.com/someguy609/be-proyek-fsi/routes"
 	"github.com/samber/do"
 
 	"github.com/common-nighthawk/go-figure"
@@ -37,12 +37,12 @@ func run(server *gin.Engine) {
 
 	var serve string
 	if os.Getenv("APP_ENV") == "localhost" {
-		serve = "0.0.0.0:" + port
+		serve = "localhost:" + port
 	} else {
 		serve = ":" + port
 	}
 
-	myFigure := figure.NewColorFigure("Caknoo", "", "green", true)
+	myFigure := figure.NewColorFigure("FSI", "", "green", true)
 	myFigure.Print()
 
 	if err := server.Run(serve); err != nil {

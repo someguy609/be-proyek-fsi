@@ -6,5 +6,7 @@ import (
 )
 
 func RegisterRoutes(server *gin.Engine, injector *do.Injector) {
-	User(server, injector)
+	// User(server, injector)
+	Location(server, injector)
+	CustomerCount(server, injector)
 }

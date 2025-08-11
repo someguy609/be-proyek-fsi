@@ -1,9 +1,9 @@
 package provider
 
 import (
-	"github.com/Caknoooo/go-gin-clean-starter/config"
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
-	"github.com/Caknoooo/go-gin-clean-starter/service"
+	"github.com/someguy609/be-proyek-fsi/config"
+	"github.com/someguy609/be-proyek-fsi/constants"
+	"github.com/someguy609/be-proyek-fsi/service"
 	"github.com/samber/do"
 	"gorm.io/gorm"
 )
@@ -27,4 +27,6 @@ func RegisterDependencies(injector *do.Injector) {
 
 	// Provide Dependencies
 	ProvideUserDependencies(injector, db, jwtService)
+	ProvideLocationDependencies(injector, db)
+	ProvideCustomerCountDependencies(injector, db)
 }

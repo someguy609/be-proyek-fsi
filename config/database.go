@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
+	"github.com/someguy609/be-proyek-fsi/constants"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -28,7 +28,7 @@ func SetUpDatabaseConnection() *gorm.DB {
 	dbName := os.Getenv("DB_NAME")
 	dbPort := os.Getenv("DB_PORT")
 
-	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v", dbHost, dbUser, dbPass, dbName, dbPort)
+	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=require", dbHost, dbUser, dbPass, dbName, dbPort)
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  dsn,

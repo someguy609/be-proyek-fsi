@@ -3,7 +3,7 @@ package repository
 import (
 	"math"
 
-	"github.com/Caknoooo/go-gin-clean-starter/dto"
+	"github.com/someguy609/be-proyek-fsi/dto"
 	"gorm.io/gorm"
 )
 

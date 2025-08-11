@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"github.com/Caknoooo/go-gin-clean-starter/helpers"
 	"github.com/google/uuid"
+	"github.com/someguy609/be-proyek-fsi/helpers"
 	"gorm.io/gorm"
 )
 
