@@ -12,9 +12,9 @@ type (
 	LocationRepository interface {
 		Create(ctx context.Context, tx *gorm.DB, location entity.Location) (entity.Location, error)
 		GetAllLocationWithPagination(ctx context.Context, tx *gorm.DB, req dto.PaginationRequest) (dto.GetAllLocationRepositoryResponse, error)
-		GetLocationById(ctx context.Context, tx *gorm.DB, locationId uint64) (entity.Location, error)
+		GetLocationById(ctx context.Context, tx *gorm.DB, locationId string) (entity.Location, error)
 		Update(ctx context.Context, tx *gorm.DB, location entity.Location) (entity.Location, error)
-		Delete(ctx context.Context, tx *gorm.DB, locationId uint64) error
+		Delete(ctx context.Context, tx *gorm.DB, locationId string) error
 	}
 
 	locationRepository struct {
@@ -77,7 +77,7 @@ func (r *locationRepository) GetAllLocationWithPagination(ctx context.Context, t
 	}, nil
 }
 
-func (r *locationRepository) GetLocationById(ctx context.Context, tx *gorm.DB, locationId uint64) (entity.Location, error) {
+func (r *locationRepository) GetLocationById(ctx context.Context, tx *gorm.DB, locationId string) (entity.Location, error) {
 	if tx == nil {
 		tx = r.db
 	}
@@ -103,7 +103,7 @@ func (r *locationRepository) Update(ctx context.Context, tx *gorm.DB, location e
 	return location, nil
 }
 
-func (r *locationRepository) Delete(ctx context.Context, tx *gorm.DB, locationId uint64) error {
+func (r *locationRepository) Delete(ctx context.Context, tx *gorm.DB, locationId string) error {
 	if tx == nil {
 		tx = r.db
 	}
