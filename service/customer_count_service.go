@@ -13,32 +13,44 @@ import (
 
 type (
 	CustomerCountService interface {
-		Create(ctx context.Context, req dto.CustomerCountCreateRequest) (dto.CustomerCountResponse, error)
-		GetCustomerCountById(ctx context.Context, customerCountId uint64, start *time.Time, end *time.Time, interval *time.Duration) (dto.CustomerCountGetResponse, error)
-		// Update(ctx context.Context, req dto.CustomerCountUpdateRequest, customerCountId uint64) (dto.CustomerCountUpdateResponse, error)
-		// Delete(ctx context.Context, customerCountId uint64) error
+		Create(ctx context.Context, req dto.CustomerCountCreateRequest, locationId string) (dto.CustomerCountResponse, error)
+		GetCustomerCountByLocation(ctx context.Context, locationId string, start *time.Time, end *time.Time, interval *time.Duration) (dto.CustomerCountGetResponse, error)
+		Update(ctx context.Context, req []dto.CustomerCountUpdateRequest, locationId string) (dto.CustomerCountUpdateResponse, error)
+		// Delete(ctx context.Context, locationId string, timestamp *time.Time) error
 	}
 
 	customerCountService struct {
 		customerCountRepo repository.CustomerCountRepository
-		refreshTokenRepo  repository.RefreshTokenRepository
-		jwtService        JWTService
+		locationRepo      repository.LocationRepository
 		db                *gorm.DB
 	}
 )
 
 func NewCustomerCountService(
 	customerCountRepo repository.CustomerCountRepository,
+	locationRepo repository.LocationRepository,
 	db *gorm.DB,
 ) CustomerCountService {
 	return &customerCountService{
 		customerCountRepo: customerCountRepo,
+		locationRepo:      locationRepo,
 		db:                db,
 	}
 }
 
-func (s *customerCountService) Create(ctx context.Context, req dto.CustomerCountCreateRequest) (dto.CustomerCountResponse, error) {
-	customerCount := entity.CustomerCount{}
+func (s *customerCountService) Create(ctx context.Context, req dto.CustomerCountCreateRequest, locationId string) (dto.CustomerCountResponse, error) {
+	location, err := s.locationRepo.GetLocationById(ctx, nil, locationId)
+
+	if err != nil {
+		return dto.CustomerCountResponse{}, dto.ErrLocationNotFound
+	}
+
+	customerCount := entity.CustomerCount{
+		LocationID: location.ID,
+		Gender:     req.Gender,
+		Count:      req.Count,
+		Timestamp:  req.Timestamp,
+	}
 
 	customerCountReg, err := s.customerCountRepo.Create(ctx, nil, customerCount)
 	if err != nil {
@@ -46,21 +58,21 @@ func (s *customerCountService) Create(ctx context.Context, req dto.CustomerCount
 	}
 
 	return dto.CustomerCountResponse{
-		ID:         customerCountReg.ID,
-		LocationID: customerCountReg.LocationID,
-		Count:      customerCountReg.Count,
 		Timestamp:  customerCountReg.Timestamp,
+		LocationID: customerCountReg.LocationID.String(),
+		Gender:     customerCountReg.Gender,
+		Count:      customerCountReg.Count,
 	}, nil
 }
 
-func (s *customerCountService) GetCustomerCountById(
+func (s *customerCountService) GetCustomerCountByLocation(
 	ctx context.Context,
-	customerCountId uint64,
+	locationId string,
 	start *time.Time,
 	end *time.Time,
 	interval *time.Duration,
 ) (dto.CustomerCountGetResponse, error) {
-	customerCounts, err := s.customerCountRepo.GetCustomerCountById(ctx, nil, customerCountId, start, end, interval)
+	customerCounts, err := s.customerCountRepo.GetCustomerCountByLocation(ctx, nil, locationId, start, end, interval)
 	if err != nil {
 		return dto.CustomerCountGetResponse{}, dto.ErrGetCustomerCountById
 	}
@@ -70,36 +82,39 @@ func (s *customerCountService) GetCustomerCountById(
 	}, nil
 }
 
-// func (s *customerCountService) Update(ctx context.Context, req dto.CustomerCountUpdateRequest, customerCountId uint64) (
-// 	dto.CustomerCountUpdateResponse,
-// 	error,
-// ) {
-// 	customerCount, err := s.customerCountRepo.GetCustomerCountById(ctx, nil, customerCountId)
-// 	if err != nil {
-// 		return dto.CustomerCountUpdateResponse{}, dto.ErrCustomerCountNotFound
-// 	}
+func (s *customerCountService) Update(ctx context.Context, req []dto.CustomerCountUpdateRequest, locationId string) (
+	dto.CustomerCountUpdateResponse,
+	error,
+) {
+	location, err := s.locationRepo.GetLocationById(ctx, nil, locationId)
 
-// 	data := entity.CustomerCount{
-// 		ID:         customerCount.ID,
-// 		LocationID: req.LocationID,
-// 		Count:      req.Count,
-// 		Timestamp:  req.Timestamp,
-// 	}
+	if err != nil {
+		return dto.CustomerCountUpdateResponse{}, dto.ErrLocationNotFound
+	}
 
-// 	customerCountUpdate, err := s.customerCountRepo.Update(ctx, nil, data)
-// 	if err != nil {
-// 		return dto.CustomerCountUpdateResponse{}, dto.ErrUpdateCustomerCount
-// 	}
+	var response dto.CustomerCountUpdateResponse
 
-// 	return dto.CustomerCountUpdateResponse{
-// 		ID:        customerCountUpdate.ID,
-// 		ZoneID:    customerCountUpdate.ZoneID,
-// 		Count:     customerCountUpdate.Count,
-// 		Timestamp: customerCountUpdate.Timestamp,
-// 	}, nil
-// }
+	for _, point := range req {
+		data := entity.CustomerCount{
+			Timestamp:  point.Timestamp,
+			LocationID: location.ID,
+			Gender:     point.Gender,
+			Count:      point.Count,
+		}
 
-// func (s *customerCountService) Delete(ctx context.Context, customerCountId uint64) error {
+		customerCountUpdate, err := s.customerCountRepo.Update(ctx, nil, data)
+
+		if err != nil {
+			return dto.CustomerCountUpdateResponse{}, dto.ErrUpdateCustomerCount
+		}
+
+		response.Data = append(response.Data, customerCountUpdate)
+	}
+
+	return response, nil
+}
+
+// func (s *customerCountService) Delete(ctx context.Context, locationId string, timestamp *time.Time) error {
 // 	tx := s.db.Begin()
 // 	defer SafeRollback(tx)
 

@@ -1,10 +1,22 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type Gender string
+
+const (
+	Male   Gender = "M"
+	Female Gender = "F"
+)
 
 type CustomerCount struct {
-	ID         uint64    `gorm:"primaryKey;autoIncrement" json:"id"`
-	Count      uint64    `gorm:"type:numeric;not null" json:"count" validate:"required"`
-	LocationID uint64    `gorm:"index;not null" validate:"required"`
-	Timestamp  time.Time `gorm:"index;not null" validate:"required"`
+	Timestamp  time.Time `gorm:"primaryKey;not null" validate:"required"`
+	LocationID uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"location_id" validate:"required,uuid"`
+	Location   Location  `gorm:"foreignKey:LocationID;references:ID"`
+	Gender     Gender    `gorm:"type:varchar(1);primaryKey;not null" json:"gender" validate:"required"`
+	Count      uint64    `gorm:"not null" json:"count" validate:"required"`
 }

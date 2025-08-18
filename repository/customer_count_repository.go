@@ -12,9 +12,9 @@ type (
 	CustomerCountRepository interface {
 		Create(ctx context.Context, tx *gorm.DB, customerCount entity.CustomerCount) (entity.CustomerCount, error)
 		// GetAllCustomerCountWithPagination(ctx context.Context, tx *gorm.DB, req dto.PaginationRequest) (dto.GetAllCustomerCountRepositoryResponse, error)
-		GetCustomerCountById(ctx context.Context, tx *gorm.DB, customerCountId uint64, start *time.Time, end *time.Time, interval *time.Duration) ([]entity.CustomerCount, error)
+		GetCustomerCountByLocation(ctx context.Context, tx *gorm.DB, locationId string, start *time.Time, end *time.Time, interval *time.Duration) ([]entity.CustomerCount, error)
 		Update(ctx context.Context, tx *gorm.DB, customerCountId entity.CustomerCount) (entity.CustomerCount, error)
-		Delete(ctx context.Context, tx *gorm.DB, customerCountId uint64) error
+		Delete(ctx context.Context, tx *gorm.DB, customerCountId string) error
 	}
 
 	customerCountRepository struct {
@@ -40,10 +40,22 @@ func (r *customerCountRepository) Create(ctx context.Context, tx *gorm.DB, custo
 	return customerCount, nil
 }
 
-func (r *customerCountRepository) GetCustomerCountById(
+func (r *customerCountRepository) GetCustomerCountById(ctx context.Context, tx *gorm.DB, customerCountId string) (entity.CustomerCount, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if err := tx.WithContext(ctx).Model(&entity.CustomerCount{}).Where("id = ?", customerCountId); err != nil {
+		return entity.CustomerCount{}, nil
+	}
+
+	return entity.CustomerCount{}, nil
+}
+
+func (r *customerCountRepository) GetCustomerCountByLocation(
 	ctx context.Context,
 	tx *gorm.DB,
-	customerCountId uint64,
+	locationId string,
 	start *time.Time,
 	end *time.Time,
 	interval *time.Duration,
@@ -64,8 +76,7 @@ func (r *customerCountRepository) GetCustomerCountById(
 			time_bucket(?, timestamp)
 		ORDER BY
 			timestamp
-
-	`, interval, customerCountId, start, end, interval)
+	`, interval, locationId, start, end, interval)
 
 	var customerCounts []entity.CustomerCount
 
@@ -88,7 +99,7 @@ func (r *customerCountRepository) Update(ctx context.Context, tx *gorm.DB, custo
 	return customerCount, nil
 }
 
-func (r *customerCountRepository) Delete(ctx context.Context, tx *gorm.DB, customerCountId uint64) error {
+func (r *customerCountRepository) Delete(ctx context.Context, tx *gorm.DB, customerCountId string) error {
 	if tx == nil {
 		tx = r.db
 	}

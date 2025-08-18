@@ -10,10 +10,11 @@ import (
 
 func ProvideCustomerCountDependencies(injector *do.Injector, db *gorm.DB) {
 	// Repository
+	locationRepository := repository.NewLocationRepository(db)
 	customerCountRepository := repository.NewCustomerCountRepository(db)
 
 	// Service
-	customerCountService := service.NewCustomerCountService(customerCountRepository, db)
+	customerCountService := service.NewCustomerCountService(customerCountRepository, locationRepository, db)
 
 	// Controller
 	do.Provide(

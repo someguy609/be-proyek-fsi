@@ -31,15 +31,16 @@ var (
 
 type (
 	CustomerCountCreateRequest struct {
-		Count     uint64    `json:"count" form:"count" binding:"required"`
-		Timestamp time.Time `json:"timestamp" form:"timestamp" binding:"required"`
+		Timestamp time.Time     `json:"timestamp" form:"timestamp" binding:"required"`
+		Gender    entity.Gender `json:"gender" form:"gender" binding:"required"`
+		Count     uint64        `json:"count" form:"count" binding:"required"`
 	}
 
 	CustomerCountResponse struct {
-		ID         uint64    `json:"id"`
-		LocationID uint64    `json:"location_id" form:"location_id" binding:"required"`
-		Count      uint64    `json:"count" form:"count" binding:"required"`
-		Timestamp  time.Time `json:"timestamp" form:"timestamp" binding:"required"`
+		Timestamp  time.Time     `json:"timestamp"`
+		LocationID string        `json:"location_id"`
+		Gender     entity.Gender `json:"gender"`
+		Count      uint64        `json:"count"`
 	}
 
 	CustomerCountGetResponse struct {
@@ -47,15 +48,12 @@ type (
 	}
 
 	CustomerCountUpdateRequest struct {
-		LocationID uint64    `json:"location_id" form:"location_id" binding:"required"`
-		Count      uint64    `json:"count" form:"count" binding:"required"`
-		Timestamp  time.Time `json:"timestamp" form:"timestamp" binding:"required"`
+		Timestamp time.Time     `json:"timestamp" form:"timestamp" binding:"required"`
+		Gender    entity.Gender `json:"gender" form:"gender" binding:"omitempty"`
+		Count     uint64        `json:"count" form:"count" binding:"omitempty"`
 	}
 
 	CustomerCountUpdateResponse struct {
-		ID         uint64    `json:"id"`
-		LocationID uint64    `json:"location_id" form:"location_id" binding:"required"`
-		Count      uint64    `json:"count" form:"count" binding:"required"`
-		Timestamp  time.Time `json:"timestamp" form:"timestamp" binding:"required"`
+		Data []entity.CustomerCount `json:"data"`
 	}
 )
