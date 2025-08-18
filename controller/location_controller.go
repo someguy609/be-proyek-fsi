@@ -2,12 +2,11 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"github.com/someguy609/be-proyek-fsi/dto"
 	"github.com/someguy609/be-proyek-fsi/service"
 	"github.com/someguy609/be-proyek-fsi/utils"
-	"github.com/gin-gonic/gin"
 )
 
 type (
@@ -75,13 +74,7 @@ func (c *locationController) GetAllLocation(ctx *gin.Context) {
 }
 
 func (c *locationController) GetLocationById(ctx *gin.Context) {
-	locationId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
-	
-	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_LOCATION, err.Error(), nil)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-		return
-	}
+	locationId := ctx.Param("id")
 
 	result, err := c.locationService.GetLocationById(ctx.Request.Context(), locationId)
 	if err != nil {
@@ -102,13 +95,7 @@ func (c *locationController) Update(ctx *gin.Context) {
 		return
 	}
 
-	locationId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
-
-	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_DELETE_LOCATION, err.Error(), nil)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-		return
-	}
+	locationId := ctx.Param("id")
 
 	result, err := c.locationService.Update(ctx.Request.Context(), req, locationId)
 	if err != nil {
@@ -122,13 +109,7 @@ func (c *locationController) Update(ctx *gin.Context) {
 }
 
 func (c *locationController) Delete(ctx *gin.Context) {
-	locationId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
-
-	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_DELETE_LOCATION, err.Error(), nil)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-		return
-	}
+	locationId := ctx.Param("id")
 
 	if err := c.locationService.Delete(ctx.Request.Context(), locationId); err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_DELETE_LOCATION, err.Error(), nil)
