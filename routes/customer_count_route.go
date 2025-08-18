@@ -12,8 +12,8 @@ func CustomerCount(route *gin.Engine, injector *do.Injector) {
 	routes := route.Group("/api/location")
 	{
 		routes.POST("/:id/customer-count", customerCountController.Create)
-		routes.GET("/:id/customer-count", customerCountController.GetCustomerCountById)
-		// routes.PATCH("/:id/customer-count", customerCountController.Update)
+		routes.GET("/:id/customer-count", customerCountController.GetCustomerCountByLocation)
+		routes.PATCH("/:id/customer-count", customerCountController.Update)
 		// routes.DELETE("/:id/customer-count", customerCountController.Delete)
 	}
 }

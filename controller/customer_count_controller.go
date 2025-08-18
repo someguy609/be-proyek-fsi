@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,8 +13,8 @@ import (
 type (
 	CustomerCountController interface {
 		Create(ctx *gin.Context)
-		GetCustomerCountById(ctx *gin.Context)
-		// Update(ctx *gin.Context)
+		GetCustomerCountByLocation(ctx *gin.Context)
+		Update(ctx *gin.Context)
 		// Delete(ctx *gin.Context)
 	}
 
@@ -31,6 +30,8 @@ func NewCustomerCountController(us service.CustomerCountService) CustomerCountCo
 }
 
 func (c *customerCountController) Create(ctx *gin.Context) {
+	locationId := ctx.Param("id")
+
 	var customerCount dto.CustomerCountCreateRequest
 	if err := ctx.ShouldBind(&customerCount); err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
@@ -38,7 +39,7 @@ func (c *customerCountController) Create(ctx *gin.Context) {
 		return
 	}
 
-	result, err := c.customerCountService.Create(ctx.Request.Context(), customerCount)
+	result, err := c.customerCountService.Create(ctx.Request.Context(), customerCount, locationId)
 	if err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_CREATE_CUSTOMER_COUNT, err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, res)
@@ -49,14 +50,8 @@ func (c *customerCountController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
-func (c *customerCountController) GetCustomerCountById(ctx *gin.Context) {
-	locationId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
-
-	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_CUSTOMER_COUNT, err.Error(), nil)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-		return
-	}
+func (c *customerCountController) GetCustomerCountByLocation(ctx *gin.Context) {
+	locationId := ctx.Param("id")
 
 	var start, end *time.Time = nil, nil
 	var interval *time.Duration = nil
@@ -100,7 +95,7 @@ func (c *customerCountController) GetCustomerCountById(ctx *gin.Context) {
 
 	interval = &intervalDuration
 
-	result, err := c.customerCountService.GetCustomerCountById(ctx.Request.Context(), locationId, start, end, interval)
+	result, err := c.customerCountService.GetCustomerCountByLocation(ctx.Request.Context(), locationId, start, end, interval)
 	if err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_CUSTOMER_COUNT, err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, res)
@@ -111,43 +106,31 @@ func (c *customerCountController) GetCustomerCountById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
-// func (c *customerCountController) Update(ctx *gin.Context) {
-// 	customerCountId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+func (c *customerCountController) Update(ctx *gin.Context) {
+	locationId := ctx.Param("id")
 
-// 	if err != nil {
-// 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_DELETE_CUSTOMER_COUNT, err.Error(), nil)
-// 		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-// 		return
-// 	}
+	var req []dto.CustomerCountUpdateRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
+		return
+	}
 
-// 	var req dto.CustomerCountUpdateRequest
-// 	if err := ctx.ShouldBind(&req); err != nil {
-// 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
-// 		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-// 		return
-// 	}
+	result, err := c.customerCountService.Update(ctx.Request.Context(), req, locationId)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_CUSTOMER_COUNT, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
 
-// 	result, err := c.customerCountService.Update(ctx.Request.Context(), req, customerCountId)
-// 	if err != nil {
-// 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_CUSTOMER_COUNT, err.Error(), nil)
-// 		ctx.JSON(http.StatusBadRequest, res)
-// 		return
-// 	}
-
-// 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_CUSTOMER_COUNT, result)
-// 	ctx.JSON(http.StatusOK, res)
-// }
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_CUSTOMER_COUNT, result)
+	ctx.JSON(http.StatusOK, res)
+}
 
 // func (c *customerCountController) Delete(ctx *gin.Context) {
-// 	customerCountId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+// 	locationId := ctx.Param("id")
 
-// 	if err != nil {
-// 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_DELETE_CUSTOMER_COUNT, err.Error(), nil)
-// 		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-// 		return
-// 	}
-
-// 	if err := c.customerCountService.Delete(ctx.Request.Context(), customerCountId); err != nil {
+// 	if err := c.customerCountService.Delete(ctx.Request.Context(), locationId, nil); err != nil {
 // 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_DELETE_CUSTOMER_COUNT, err.Error(), nil)
 // 		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
 // 		return
