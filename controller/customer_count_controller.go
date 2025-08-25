@@ -53,8 +53,7 @@ func (c *customerCountController) Create(ctx *gin.Context) {
 func (c *customerCountController) GetCustomerCountByLocation(ctx *gin.Context) {
 	locationId := ctx.Param("id")
 
-	var start, end *time.Time = nil, nil
-	var interval *time.Duration = nil
+	var start, end *time.Time
 
 	startString := ctx.Query("start")
 
@@ -84,16 +83,7 @@ func (c *customerCountController) GetCustomerCountByLocation(ctx *gin.Context) {
 		end = &endTime
 	}
 
-	intervalString := ctx.DefaultQuery("interval", "5m")
-	intervalDuration, err := time.ParseDuration(intervalString)
-
-	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_CUSTOMER_COUNT, err.Error(), nil)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
-		return
-	}
-
-	interval = &intervalDuration
+	interval := ctx.DefaultQuery("interval", "minute")
 
 	result, err := c.customerCountService.GetCustomerCountByLocation(ctx.Request.Context(), locationId, start, end, interval)
 	if err != nil {
