@@ -14,7 +14,7 @@ import (
 type (
 	CustomerCountService interface {
 		Create(ctx context.Context, req dto.CustomerCountCreateRequest, locationId string) (dto.CustomerCountResponse, error)
-		GetCustomerCountByLocation(ctx context.Context, locationId string, start *time.Time, end *time.Time, interval *time.Duration) (dto.CustomerCountGetResponse, error)
+		GetCustomerCountByLocation(ctx context.Context, locationId string, start *time.Time, end *time.Time, interval string) (dto.CustomerCountGetResponse, error)
 		Update(ctx context.Context, req []dto.CustomerCountUpdateRequest, locationId string) (dto.CustomerCountUpdateResponse, error)
 		// Delete(ctx context.Context, locationId string, timestamp *time.Time) error
 	}
@@ -70,7 +70,7 @@ func (s *customerCountService) GetCustomerCountByLocation(
 	locationId string,
 	start *time.Time,
 	end *time.Time,
-	interval *time.Duration,
+	interval string,
 ) (dto.CustomerCountGetResponse, error) {
 	customerCounts, err := s.customerCountRepo.GetCustomerCountByLocation(ctx, nil, locationId, start, end, interval)
 	if err != nil {

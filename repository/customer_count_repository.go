@@ -12,7 +12,7 @@ type (
 	CustomerCountRepository interface {
 		Create(ctx context.Context, tx *gorm.DB, customerCount entity.CustomerCount) (entity.CustomerCount, error)
 		// GetAllCustomerCountWithPagination(ctx context.Context, tx *gorm.DB, req dto.PaginationRequest) (dto.GetAllCustomerCountRepositoryResponse, error)
-		GetCustomerCountByLocation(ctx context.Context, tx *gorm.DB, locationId string, start *time.Time, end *time.Time, interval *time.Duration) ([]entity.CustomerCount, error)
+		GetCustomerCountByLocation(ctx context.Context, tx *gorm.DB, locationId string, start *time.Time, end *time.Time, interval string) ([]entity.CustomerCount, error)
 		Update(ctx context.Context, tx *gorm.DB, customerCountId entity.CustomerCount) (entity.CustomerCount, error)
 		Delete(ctx context.Context, tx *gorm.DB, customerCountId string) error
 	}
@@ -58,7 +58,7 @@ func (r *customerCountRepository) GetCustomerCountByLocation(
 	locationId string,
 	start *time.Time,
 	end *time.Time,
-	interval *time.Duration,
+	interval string,
 ) ([]entity.CustomerCount, error) {
 	if tx == nil {
 		tx = r.db
@@ -66,21 +66,24 @@ func (r *customerCountRepository) GetCustomerCountByLocation(
 
 	query := tx.Raw(`
 		SELECT
-			time_bucket(?, timestamp) AS timestamp
+			date_trunc(?, timestamp) AS timestamp,
+			location_id,
+			gender,
 			SUM(count) AS count
 		FROM
-			customer_count
+			customer_counts
 		WHERE
 			location_id = ? AND timestamp >= ? AND timestamp <= ?
 		GROUP BY
-			time_bucket(?, timestamp)
+			timestamp, location_id, gender
 		ORDER BY
 			timestamp
-	`, interval, locationId, start, end, interval)
+	`, interval, locationId, start, end)
 
 	var customerCounts []entity.CustomerCount
 
 	if err := query.Scan(&customerCounts).Error; err != nil {
+		panic(err)
 		return nil, err
 	}
 
