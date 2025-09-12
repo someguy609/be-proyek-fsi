@@ -92,7 +92,7 @@ func (c *customerCountController) GetCustomerCountByLocation(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_CUSTOMER_COUNT, result)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_CUSTOMER_COUNT, result)
 	ctx.JSON(http.StatusOK, res)
 }
 
