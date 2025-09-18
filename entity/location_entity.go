@@ -7,7 +7,7 @@ import (
 
 type Location struct {
 	ID       uuid.UUID       `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id"`
-	CameraID uint            `gorm:"autoIncrement" json:"camera_id" validate:"required"`
+	CameraID uint            `gorm:"not null" json:"camera_id" validate:"required"`
 	Name     string          `gorm:"unique;not null" json:"name" validate:"required"`
 	X1       float32         `gorm:"not null" json:"x1" validate:"required"`
 	Y1       float32         `gorm:"not null" json:"y1" validate:"required"`
