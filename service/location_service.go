@@ -45,6 +45,7 @@ func NewLocationService(
 
 func (s *locationService) Create(ctx context.Context, req dto.LocationCreateRequest) (dto.LocationResponse, error) {
 	location := entity.Location{
+		CameraID: req.CameraID,
 		Name: req.Name,
 		X1:   req.X1,
 		Y1:   req.Y1,
@@ -59,6 +60,7 @@ func (s *locationService) Create(ctx context.Context, req dto.LocationCreateRequ
 
 	return dto.LocationResponse{
 		ID:   locationReg.ID.String(),
+		CameraID: locationReg.CameraID,
 		Name: locationReg.Name,
 		X1:   locationReg.X1,
 		Y1:   locationReg.Y1,
