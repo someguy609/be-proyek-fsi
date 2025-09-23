@@ -32,20 +32,22 @@ var (
 
 type (
 	LocationCreateRequest struct {
-		Name string  `json:"name" form:"name" binding:"required"`
-		X1   float32 `json:"x1" form:"x1" binding:"required"`
-		Y1   float32 `json:"y1" form:"y1" binding:"required"`
-		X2   float32 `json:"x2" form:"x2" binding:"required"`
-		Y2   float32 `json:"y2" form:"y2" binding:"required"`
+		CameraID uint    `json:"camera_id" form:"camera_id" binding:"required"`
+		Name     string  `json:"name" form:"name" binding:"required"`
+		X1       float32 `json:"x1" form:"x1" binding:"required"`
+		Y1       float32 `json:"y1" form:"y1" binding:"required"`
+		X2       float32 `json:"x2" form:"x2" binding:"required"`
+		Y2       float32 `json:"y2" form:"y2" binding:"required"`
 	}
 
 	LocationResponse struct {
-		ID   string  `json:"id"`
-		Name string  `json:"name"`
-		X1   float32 `json:"x1"`
-		Y1   float32 `json:"y1"`
-		X2   float32 `json:"x2"`
-		Y2   float32 `json:"y2"`
+		ID       string  `json:"id"`
+		CameraID uint    `json:"camera_id"`
+		Name     string  `json:"name"`
+		X1       float32 `json:"x1"`
+		Y1       float32 `json:"y1"`
+		X2       float32 `json:"x2"`
+		Y2       float32 `json:"y2"`
 	}
 
 	LocationPaginationResponse struct {
