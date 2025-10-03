@@ -1,14 +1,15 @@
 package provider
 
 import (
+	"github.com/samber/do"
 	"github.com/someguy609/be-proyek-fsi/controller"
 	"github.com/someguy609/be-proyek-fsi/repository"
 	"github.com/someguy609/be-proyek-fsi/service"
-	"github.com/samber/do"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	// "gorm.io/gorm"
 )
 
-func ProvideCustomerCountDependencies(injector *do.Injector, db *gorm.DB) {
+func ProvideCustomerCountDependencies(injector *do.Injector, db *mongo.Database) {
 	// Repository
 	locationRepository := repository.NewLocationRepository(db)
 	customerCountRepository := repository.NewCustomerCountRepository(db)

@@ -33,14 +33,14 @@ type (
 	CustomerCountCreateRequest struct {
 		Timestamp time.Time     `json:"timestamp" form:"timestamp" binding:"required"`
 		Gender    entity.Gender `json:"gender" form:"gender" binding:"required"`
-		Count     uint64        `json:"count" form:"count" binding:"required"`
+		Count     int64         `json:"count" form:"count" binding:"required"`
 	}
 
 	CustomerCountResponse struct {
 		Timestamp  time.Time     `json:"timestamp"`
 		LocationID string        `json:"location_id"`
 		Gender     entity.Gender `json:"gender"`
-		Count      uint64        `json:"count"`
+		Count      int64         `json:"count"`
 	}
 
 	CustomerCountGetResponse struct {
@@ -50,7 +50,7 @@ type (
 	CustomerCountUpdateRequest struct {
 		Timestamp time.Time     `json:"timestamp" form:"timestamp" binding:"required"`
 		Gender    entity.Gender `json:"gender" form:"gender" binding:"omitempty"`
-		Count     uint64        `json:"count" form:"count" binding:"omitempty"`
+		Count     int64         `json:"count" form:"count" binding:"omitempty"`
 	}
 
 	CustomerCountUpdateResponse struct {

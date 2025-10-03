@@ -3,24 +3,25 @@ package command
 import (
 	"log"
 	"os"
-	"strings"
+	// "strings"
 
+	"github.com/samber/do"
 	"github.com/someguy609/be-proyek-fsi/constants"
 	"github.com/someguy609/be-proyek-fsi/migrations"
-	"github.com/someguy609/be-proyek-fsi/script"
-	"github.com/samber/do"
-	"gorm.io/gorm"
+	// "github.com/someguy609/be-proyek-fsi/script"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	// "gorm.io/gorm"
 )
 
 func Commands(injector *do.Injector) bool {
-	db := do.MustInvokeNamed[*gorm.DB](injector, constants.DB)
+	db := do.MustInvokeNamed[*mongo.Database](injector, constants.DB)
 	
-	var scriptName string
+	// var scriptName string
 
 	migrate := false
 	seed := false
 	run := false
-	scriptFlag := false
+	// scriptFlag := false
 
 	for _, arg := range os.Args[1:] {
 		if arg == "--migrate" {
@@ -32,10 +33,10 @@ func Commands(injector *do.Injector) bool {
 		if arg == "--run" {
 			run = true
 		}
-		if strings.HasPrefix(arg, "--script:") {
-			scriptFlag = true
-			scriptName = strings.TrimPrefix(arg, "--script:")
-		}
+		// if strings.HasPrefix(arg, "--script:") {
+			// scriptFlag = true
+			// scriptName = strings.TrimPrefix(arg, "--script:")
+		// }
 	}
 
 	if migrate {
@@ -52,12 +53,12 @@ func Commands(injector *do.Injector) bool {
 		log.Println("seeder completed successfully")
 	}
 
-	if scriptFlag {
-		if err := script.Script(scriptName, db); err != nil {
-			log.Fatalf("error script: %v", err)
-		}
-		log.Println("script run successfully")
-	}
+	// if scriptFlag {
+	// 	if err := script.Script(scriptName, db); err != nil {
+	// 		log.Fatalf("error script: %v", err)
+	// 	}
+	// 	log.Println("script run successfully")
+	// }
 
 	if run {
 		return true

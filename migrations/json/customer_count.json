@@ -1,62 +1,9 @@
 [
-    {
-        "timestamp": "2025-08-18T00:00:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "M",
-        "count": 100
-    },
-    {
-        "timestamp": "2025-08-18T00:00:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "F",
-        "count": 200
-    },
-    {
-        "timestamp": "2025-08-18T00:05:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "M",
-        "count": 126
-    },
-    {
-        "timestamp": "2025-08-18T00:05:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "F",
-        "count": 173
-    },
-    {
-        "timestamp": "2025-08-18T00:10:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "M",
-        "count": 24
-    },
-    {
-        "timestamp": "2025-08-18T00:10:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "F",
-        "count": 86
-    },
-    {
-        "timestamp": "2025-08-18T00:15:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "M",
-        "count": 94
-    },
-    {
-        "timestamp": "2025-08-18T00:15:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "F",
-        "count": 33
-    },
-    {
-        "timestamp": "2025-08-18T00:20:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "M",
-        "count": 114
-    },
-    {
-        "timestamp": "2025-08-18T00:20:00+00:00",
-        "location_id": "45f5f1fa-523b-4b6e-8403-0f63801bcf2e",
-        "gender": "F",
-        "count": 22
-    }
+	{
+        "id": { "$oid": "68de5b3991a5ceeb0d0a417a" },
+		"timestamp": "2025-08-18T00:00:00.000Z",
+		"location_id": { "$oid": "68de5b3991a5ceeb0d0a417e" },
+		"gender": "M",
+		"count": 100
+	}
 ]

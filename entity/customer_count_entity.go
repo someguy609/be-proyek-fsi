@@ -1,22 +1,21 @@
 package entity
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type Gender string
 
 const (
-	Male   Gender = "M"
-	Female Gender = "F"
+	CustomerCountsCollection        = "customer_counts"
+	Male                     Gender = "M"
+	Female                   Gender = "F"
 )
 
 type CustomerCount struct {
-	Timestamp  time.Time `gorm:"primaryKey;not null" json:"timestamp" validate:"required"`
-	LocationID uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"location_id" validate:"required,uuid"`
-	Location   Location  `gorm:"foreignKey:LocationID;references:ID" json:"-"`
-	Gender     Gender    `gorm:"type:varchar(1);primaryKey;not null" json:"gender" validate:"required"`
-	Count      uint64    `gorm:"not null" json:"count" validate:"required"`
+	ID         bson.ObjectID `bson:"_id,omitempty" json:"-"`
+	LocationID bson.ObjectID `bson:"location_id,omitempty" json:"location_id,omitempty" validate:"required"`
+	Timestamp  bson.DateTime `bson:"timestamp" json:"timestamp" validate:"required"`
+	Gender     Gender        `bson:"gender" json:"gender" validate:"required"`
+	Count      int64         `bson:"count" json:"count" validate:"required"`
 }
