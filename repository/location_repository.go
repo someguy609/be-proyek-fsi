@@ -121,7 +121,13 @@ func (r *locationRepository) Update(ctx context.Context, location entity.Locatio
 
 func (r *locationRepository) Delete(ctx context.Context, locationId string) error {
 	collection := r.db.Collection(entity.LocationCollection)
-	filter := bson.M{"_id": locationId}
+	
+	locationObjectId, err := bson.ObjectIDFromHex(locationId)
+	if err != nil {
+		return err
+	}
+
+	filter := bson.M{"_id": locationObjectId}
 
 	if _, err := collection.DeleteOne(ctx, filter); err != nil {
 		return err
