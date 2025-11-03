@@ -1,27 +1,19 @@
 package entity
 
 import (
-	"github.com/google/uuid"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+const LocationCollection = "locations"
+
 type Location struct {
-	ID       uuid.UUID       `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id"`
-	CameraID uint            `gorm:"not null" json:"camera_id" validate:"required"`
-	Name     string          `gorm:"unique;not null" json:"name" validate:"required"`
-	X1       float32         `gorm:"not null" json:"x1" validate:"required"`
-	Y1       float32         `gorm:"not null" json:"y1" validate:"required"`
-	X2       float32         `gorm:"not null" json:"x2" validate:"required"`
-	Y2       float32         `gorm:"not null" json:"y2" validate:"required"`
-	Counts   []CustomerCount `gorm:"foreignKey:LocationID" json:"-"`
+	ID       bson.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	CameraID int64         `bson:"camera_id" json:"camera_id" validate:"required"`
+	Name     string        `bson:"name" json:"name" validate:"required"`
+	X1       int64         `bson:"x1" json:"x1" validate:"required"`
+	Y1       int64         `bson:"y1" json:"y1" validate:"required"`
+	X2       int64         `bson:"x2" json:"x2" validate:"required"`
+	Y2       int64         `bson:"y2" json:"y2" validate:"required"`
 
 	Timestamp
-}
-
-func (l *Location) BeforeCreate(_ *gorm.DB) (err error) {
-	if l.ID == uuid.Nil {
-		l.ID = uuid.New()
-	}
-
-	return nil
 }

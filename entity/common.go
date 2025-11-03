@@ -5,8 +5,8 @@ import (
 )
 
 type Timestamp struct {
-	CreatedAt time.Time `gorm:"type:timestamp with time zone" json:"created_at"`
-	UpdatedAt time.Time `gorm:"type:timestamp with time zone" json:"updated_at"`
+	CreatedAt time.Time `gorm:"type:timestamp with time zone" bson:"created_at" json:"created_at"`
+	UpdatedAt time.Time `gorm:"type:timestamp with time zone" bson:"updated_at" json:"updated_at"`
 }
 
 type Authorization struct {

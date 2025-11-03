@@ -1,16 +1,17 @@
 package seeds
 
 import (
-	"encoding/json"
-	"errors"
+	"context"
+	// "encoding/json"
 	"io"
 	"os"
 
 	"github.com/someguy609/be-proyek-fsi/entity"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-func ListLocationSeeder(db *gorm.DB) error {
+func ListLocationSeeder(db *mongo.Database) error {
 	jsonFile, err := os.Open("./migrations/json/locations.json")
 	if err != nil {
 		return err
@@ -22,29 +23,24 @@ func ListLocationSeeder(db *gorm.DB) error {
 	}
 
 	var listLocation []entity.Location
-	if err := json.Unmarshal(jsonData, &listLocation); err != nil {
+	if err := bson.UnmarshalExtJSON(jsonData, false, &listLocation); err != nil {
 		return err
 	}
 
-	hasTable := db.Migrator().HasTable(&entity.Location{})
-	if !hasTable {
-		if err := db.Migrator().CreateTable(&entity.Location{}); err != nil {
-			return err
-		}
-	}
+	collection := db.Collection(entity.LocationCollection)
 
 	for _, data := range listLocation {
-		var location entity.Location
-		err := db.Where(&entity.Location{Name: data.Name}).First(&location).Error
-		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		count, err := collection.CountDocuments(context.TODO(), bson.M{"name": data.Name})
+		if err != nil {
 			return err
 		}
 
-		isData := db.Find(&location, "name = ?", data.Name).RowsAffected
-		if isData == 0 {
-			if err := db.Create(&data).Error; err != nil {
-				return err
-			}
+		if count > 0 {
+			continue
+		}
+
+		if _, err := collection.InsertOne(context.TODO(), data); err != nil {
+			return err
 		}
 	}
 

@@ -1,16 +1,17 @@
 package seeds
 
 import (
-	"encoding/json"
-	"errors"
+	"context"
+	// "encoding/json"
 	"io"
 	"os"
 
 	"github.com/someguy609/be-proyek-fsi/entity"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-func ListCustomerCountSeeder(db *gorm.DB) error {
+func ListCustomerCountSeeder(db *mongo.Database) error {
 	jsonFile, err := os.Open("./migrations/json/customer_count.json")
 	if err != nil {
 		return err
@@ -22,29 +23,23 @@ func ListCustomerCountSeeder(db *gorm.DB) error {
 	}
 
 	var listCustomerCount []entity.CustomerCount
-	if err := json.Unmarshal(jsonData, &listCustomerCount); err != nil {
+	if err := bson.UnmarshalExtJSON(jsonData, false, &listCustomerCount); err != nil {
 		return err
 	}
 
-	hasTable := db.Migrator().HasTable(&entity.CustomerCount{})
-	if !hasTable {
-		if err := db.Migrator().CreateTable(&entity.CustomerCount{}); err != nil {
-			return err
-		}
-	}
+	collection := db.Collection(entity.CustomerCountsCollection)
 
 	for _, data := range listCustomerCount {
-		var customerCount entity.CustomerCount
-		err := db.Where(&entity.CustomerCount{Timestamp: data.Timestamp, LocationID: data.LocationID, Gender: data.Gender}).First(&customerCount).Error
-		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		count, err := collection.CountDocuments(context.TODO(), bson.M{"timestamp": data.Timestamp, "location_id": data.LocationID, "gender": data.Gender})
+		if err != nil {
 			return err
 		}
+		if count > 0 {
+			continue
+		}
 
-		isData := db.Find(&customerCount, "timestamp = ? AND location_id = ? AND gender = ?", data.Timestamp, data.LocationID, data.Gender).RowsAffected
-		if isData == 0 {
-			if err := db.Create(&data).Error; err != nil {
-				return err
-			}
+		if _, err := collection.InsertOne(context.TODO(), data); err != nil {
+			return err
 		}
 	}
 

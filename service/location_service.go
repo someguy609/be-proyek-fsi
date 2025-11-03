@@ -3,7 +3,8 @@ package service
 import (
 	"context"
 
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	// "gorm.io/gorm"
 
 	"github.com/someguy609/be-proyek-fsi/dto"
 	"github.com/someguy609/be-proyek-fsi/entity"
@@ -21,13 +22,13 @@ type (
 
 	locationService struct {
 		locationRepo repository.LocationRepository
-		db           *gorm.DB
+		db           *mongo.Database
 	}
 )
 
 func NewLocationService(
 	locationRepo repository.LocationRepository,
-	db *gorm.DB,
+	db *mongo.Database,
 ) LocationService {
 	return &locationService{
 		locationRepo: locationRepo,
@@ -46,26 +47,26 @@ func NewLocationService(
 func (s *locationService) Create(ctx context.Context, req dto.LocationCreateRequest) (dto.LocationResponse, error) {
 	location := entity.Location{
 		CameraID: req.CameraID,
-		Name: req.Name,
-		X1:   req.X1,
-		Y1:   req.Y1,
-		X2:   req.X2,
-		Y2:   req.Y2,
+		Name:     req.Name,
+		X1:       req.X1,
+		Y1:       req.Y1,
+		X2:       req.X2,
+		Y2:       req.Y2,
 	}
 
-	locationReg, err := s.locationRepo.Create(ctx, nil, location)
+	locationReg, err := s.locationRepo.Create(ctx, location)
 	if err != nil {
 		return dto.LocationResponse{}, dto.ErrCreateLocation
 	}
 
 	return dto.LocationResponse{
-		ID:   locationReg.ID.String(),
+		ID:       locationReg.ID.Hex(),
 		CameraID: locationReg.CameraID,
-		Name: locationReg.Name,
-		X1:   locationReg.X1,
-		Y1:   locationReg.Y1,
-		X2:   locationReg.X2,
-		Y2:   locationReg.Y2,
+		Name:     locationReg.Name,
+		X1:       locationReg.X1,
+		Y1:       locationReg.Y1,
+		X2:       locationReg.X2,
+		Y2:       locationReg.Y2,
 	}, nil
 }
 
@@ -73,7 +74,7 @@ func (s *locationService) GetAllLocationWithPagination(
 	ctx context.Context,
 	req dto.PaginationRequest,
 ) (dto.LocationPaginationResponse, error) {
-	dataWithPaginate, err := s.locationRepo.GetAllLocationWithPagination(ctx, nil, req)
+	dataWithPaginate, err := s.locationRepo.GetAllLocationWithPagination(ctx, req)
 	if err != nil {
 		return dto.LocationPaginationResponse{}, err
 	}
@@ -81,7 +82,7 @@ func (s *locationService) GetAllLocationWithPagination(
 	var datas []dto.LocationResponse
 	for _, location := range dataWithPaginate.Locations {
 		data := dto.LocationResponse{
-			ID:   location.ID.String(),
+			ID:   location.ID.Hex(),
 			Name: location.Name,
 			X1:   location.X1,
 			Y1:   location.Y1,
@@ -104,13 +105,13 @@ func (s *locationService) GetAllLocationWithPagination(
 }
 
 func (s *locationService) GetLocationById(ctx context.Context, locationId string) (dto.LocationResponse, error) {
-	location, err := s.locationRepo.GetLocationById(ctx, nil, locationId)
+	location, err := s.locationRepo.GetLocationById(ctx, locationId)
 	if err != nil {
 		return dto.LocationResponse{}, dto.ErrGetLocationById
 	}
 
 	return dto.LocationResponse{
-		ID:   location.ID.String(),
+		ID:   location.ID.Hex(),
 		Name: location.Name,
 		X1:   location.X1,
 		Y1:   location.Y1,
@@ -123,7 +124,7 @@ func (s *locationService) Update(ctx context.Context, req dto.LocationUpdateRequ
 	dto.LocationUpdateResponse,
 	error,
 ) {
-	location, err := s.locationRepo.GetLocationById(ctx, nil, locationId)
+	location, err := s.locationRepo.GetLocationById(ctx, locationId)
 	if err != nil {
 		return dto.LocationUpdateResponse{}, dto.ErrLocationNotFound
 	}
@@ -137,31 +138,29 @@ func (s *locationService) Update(ctx context.Context, req dto.LocationUpdateRequ
 		Y2:   req.Y2,
 	}
 
-	locationUpdate, err := s.locationRepo.Update(ctx, nil, data)
+	locationUpdate, err := s.locationRepo.Update(ctx, data)
 	if err != nil {
 		return dto.LocationUpdateResponse{}, dto.ErrUpdateLocation
 	}
 
 	return dto.LocationUpdateResponse{
-		ID:   locationUpdate.ID.String(),
-		Name: locationUpdate.Name,
-		X1:   locationUpdate.X1,
-		Y1:   locationUpdate.Y1,
-		X2:   locationUpdate.X2,
-		Y2:   locationUpdate.Y2,
+		ID:       locationUpdate.ID.Hex(),
+		Name:     locationUpdate.Name,
+		CameraID: locationUpdate.CameraID,
+		X1:       locationUpdate.X1,
+		Y1:       locationUpdate.Y1,
+		X2:       locationUpdate.X2,
+		Y2:       locationUpdate.Y2,
 	}, nil
 }
 
 func (s *locationService) Delete(ctx context.Context, locationId string) error {
-	tx := s.db.Begin()
-	defer SafeRollback(tx)
-
-	location, err := s.locationRepo.GetLocationById(ctx, nil, locationId)
+	location, err := s.locationRepo.GetLocationById(ctx, locationId)
 	if err != nil {
 		return dto.ErrLocationNotFound
 	}
 
-	err = s.locationRepo.Delete(ctx, nil, location.ID.String())
+	err = s.locationRepo.Delete(ctx, location.ID.Hex())
 	if err != nil {
 		return dto.ErrDeleteLocation
 	}

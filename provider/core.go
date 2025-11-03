@@ -1,15 +1,16 @@
 package provider
 
 import (
+	"github.com/samber/do"
 	"github.com/someguy609/be-proyek-fsi/config"
 	"github.com/someguy609/be-proyek-fsi/constants"
 	"github.com/someguy609/be-proyek-fsi/service"
-	"github.com/samber/do"
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	// "gorm.io/gorm"
 )
 
 func InitDatabase(injector *do.Injector) {
-	do.ProvideNamed(injector, constants.DB, func(i *do.Injector) (*gorm.DB, error) {
+	do.ProvideNamed(injector, constants.DB, func(i *do.Injector) (*mongo.Database, error) {
 		return config.SetUpDatabaseConnection(), nil
 	})
 }
@@ -22,11 +23,11 @@ func RegisterDependencies(injector *do.Injector) {
 	})
 
 	// Initialize
-	db := do.MustInvokeNamed[*gorm.DB](injector, constants.DB)
-	jwtService := do.MustInvokeNamed[service.JWTService](injector, constants.JWTService)
+	db := do.MustInvokeNamed[*mongo.Database](injector, constants.DB)
+	// jwtService := do.MustInvokeNamed[service.JWTService](injector, constants.JWTService)
 
 	// Provide Dependencies
-	ProvideUserDependencies(injector, db, jwtService)
+	// ProvideUserDependencies(injector, db, jwtService)
 	ProvideLocationDependencies(injector, db)
 	ProvideCustomerCountDependencies(injector, db)
 }
