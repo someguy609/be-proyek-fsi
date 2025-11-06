@@ -82,12 +82,13 @@ func (s *locationService) GetAllLocationWithPagination(
 	var datas []dto.LocationResponse
 	for _, location := range dataWithPaginate.Locations {
 		data := dto.LocationResponse{
-			ID:   location.ID.Hex(),
-			Name: location.Name,
-			X1:   location.X1,
-			Y1:   location.Y1,
-			X2:   location.X2,
-			Y2:   location.Y2,
+			ID:       location.ID.Hex(),
+			CameraID: location.CameraID,
+			Name:     location.Name,
+			X1:       location.X1,
+			Y1:       location.Y1,
+			X2:       location.X2,
+			Y2:       location.Y2,
 		}
 
 		datas = append(datas, data)
@@ -111,12 +112,13 @@ func (s *locationService) GetLocationById(ctx context.Context, locationId string
 	}
 
 	return dto.LocationResponse{
-		ID:   location.ID.Hex(),
-		Name: location.Name,
-		X1:   location.X1,
-		Y1:   location.Y1,
-		X2:   location.X2,
-		Y2:   location.Y2,
+		ID:       location.ID.Hex(),
+		CameraID: location.CameraID,
+		Name:     location.Name,
+		X1:       location.X1,
+		Y1:       location.Y1,
+		X2:       location.X2,
+		Y2:       location.Y2,
 	}, nil
 }
 
