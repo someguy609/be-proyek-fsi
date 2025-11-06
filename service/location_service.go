@@ -130,12 +130,13 @@ func (s *locationService) Update(ctx context.Context, req dto.LocationUpdateRequ
 	}
 
 	data := entity.Location{
-		ID:   location.ID,
-		Name: req.Name,
-		X1:   req.X1,
-		Y1:   req.Y1,
-		X2:   req.X2,
-		Y2:   req.Y2,
+		ID:       location.ID,
+		CameraID: req.CameraID,
+		Name:     req.Name,
+		X1:       req.X1,
+		Y1:       req.Y1,
+		X2:       req.X2,
+		Y2:       req.Y2,
 	}
 
 	locationUpdate, err := s.locationRepo.Update(ctx, data)

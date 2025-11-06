@@ -61,11 +61,12 @@ type (
 	}
 
 	LocationUpdateRequest struct {
-		Name string `json:"name" form:"name" binding:"omitempty"`
-		X1   int64  `json:"x1" form:"x1" binding:"omitempty"`
-		Y1   int64  `json:"y1" form:"y1" binding:"omitempty"`
-		X2   int64  `json:"x2" form:"x2" binding:"omitempty"`
-		Y2   int64  `json:"y2" form:"y2" binding:"omitempty"`
+		Name     string `json:"name" form:"name" binding:"omitempty"`
+		CameraID int64  `json:"camera_id" form:"camera_id" binding:"omitempty"`
+		X1       int64  `json:"x1" form:"x1" binding:"omitempty"`
+		Y1       int64  `json:"y1" form:"y1" binding:"omitempty"`
+		X2       int64  `json:"x2" form:"x2" binding:"omitempty"`
+		Y2       int64  `json:"y2" form:"y2" binding:"omitempty"`
 	}
 
 	LocationUpdateResponse struct {
