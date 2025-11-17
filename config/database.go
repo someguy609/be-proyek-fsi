@@ -31,11 +31,23 @@ func SetUpDatabaseConnection() *mongo.Database {
 	// dbPort := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
 
-	// todo: fix this later
-	dbUri := fmt.Sprintf("mongodb+srv://%v:%v@%v/%v", dbUser, dbPass, dbHost, dbName)
+    dbUri := fmt.Sprintf("mongodb+srv://%v/%v", dbHost, dbName)
 
-	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(dbUri).SetServerAPIOptions(serverAPI).SetRetryWrites(true).SetAppName(dbName)
+    creds := options.Credential{
+        Username:      dbUser,
+        Password:      dbPass,
+        AuthSource:    dbName,                  // or "admin" if that's where the user is created
+        AuthMechanism: "SCRAM-SHA-1",            // force SCRAM-SHA-1
+    }
+
+    serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+    opts := options.Client().
+        ApplyURI(dbUri).
+        SetAuth(creds).
+        SetServerAPIOptions(serverAPI).
+        SetRetryWrites(true).
+        SetAppName(dbName)
+	
 	client, err := mongo.Connect(opts)
 
 	if err != nil {
