@@ -32,22 +32,22 @@ var (
 
 type (
 	LocationCreateRequest struct {
-		CameraID int64  `json:"camera_id" form:"camera_id" binding:"required"`
-		Name     string `json:"name" form:"name" binding:"required"`
-		X1       int64  `json:"x1" form:"x1" binding:"required"`
-		Y1       int64  `json:"y1" form:"y1" binding:"required"`
-		X2       int64  `json:"x2" form:"x2" binding:"required"`
-		Y2       int64  `json:"y2" form:"y2" binding:"required"`
+		CameraID int64   `json:"camera_id" form:"camera_id" binding:"required"`
+		Name     string  `json:"name" form:"name" binding:"required"`
+		X1       float64 `json:"x1" form:"x1" binding:"required"`
+		Y1       float64 `json:"y1" form:"y1" binding:"required"`
+		X2       float64 `json:"x2" form:"x2" binding:"required"`
+		Y2       float64 `json:"y2" form:"y2" binding:"required"`
 	}
 
 	LocationResponse struct {
-		ID       string `json:"id"`
-		CameraID int64  `json:"camera_id"`
-		Name     string `json:"name"`
-		X1       int64  `json:"x1"`
-		Y1       int64  `json:"y1"`
-		X2       int64  `json:"x2"`
-		Y2       int64  `json:"y2"`
+		ID       string  `json:"id"`
+		CameraID int64   `json:"camera_id"`
+		Name     string  `json:"name"`
+		X1       float64 `json:"x1"`
+		Y1       float64 `json:"y1"`
+		X2       float64 `json:"x2"`
+		Y2       float64 `json:"y2"`
 	}
 
 	LocationPaginationResponse struct {
@@ -61,21 +61,21 @@ type (
 	}
 
 	LocationUpdateRequest struct {
-		Name     string `json:"name" form:"name" binding:"omitempty"`
-		CameraID int64  `json:"camera_id" form:"camera_id" binding:"omitempty"`
-		X1       int64  `json:"x1" form:"x1" binding:"omitempty"`
-		Y1       int64  `json:"y1" form:"y1" binding:"omitempty"`
-		X2       int64  `json:"x2" form:"x2" binding:"omitempty"`
-		Y2       int64  `json:"y2" form:"y2" binding:"omitempty"`
+		Name     string  `json:"name" form:"name" binding:"omitempty"`
+		CameraID int64   `json:"camera_id" form:"camera_id" binding:"omitempty"`
+		X1       float64 `json:"x1" form:"x1" binding:"omitempty"`
+		Y1       float64 `json:"y1" form:"y1" binding:"omitempty"`
+		X2       float64 `json:"x2" form:"x2" binding:"omitempty"`
+		Y2       float64 `json:"y2" form:"y2" binding:"omitempty"`
 	}
 
 	LocationUpdateResponse struct {
-		ID       string `json:"id"`
-		CameraID int64  `json:"camera_id"`
-		Name     string `json:"name"`
-		X1       int64  `json:"x1"`
-		Y1       int64  `json:"y1"`
-		X2       int64  `json:"x2"`
-		Y2       int64  `json:"y2"`
+		ID       string  `json:"id"`
+		CameraID int64   `json:"camera_id"`
+		Name     string  `json:"name"`
+		X1       float64 `json:"x1"`
+		Y1       float64 `json:"y1"`
+		X2       float64 `json:"x2"`
+		Y2       float64 `json:"y2"`
 	}
 )
