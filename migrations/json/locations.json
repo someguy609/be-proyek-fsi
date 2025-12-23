@@ -2,15 +2,17 @@
 	{
 		"id": { "$oid": "68de5b3991a5ceeb0d0a417e" },
 		"name": "Snacks",
+		"type": "box",
 		"camera_id": 1,
 		"x1": 10,
 		"y1": 20,
 		"x2": 30,
-		"y4": 40
+		"y2": 40
 	},
 	{
 		"id": { "$oid": "68de5b3991a5ceeb0d0a417f" },
 		"name": "Beverages",
+		"type": "box",
 		"camera_id": 1,
 		"x1": 50,
 		"y1": 60,
